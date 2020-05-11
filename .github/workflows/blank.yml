@@ -17,11 +17,13 @@ jobs:
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths my-artifact README.md
+      - uses: olegtarasov/get-tag@v2
+        id: tagName
       - name: Read Release Notes
         id: release_notes
         uses: juliangruber/read-file-action@v1
         with:
-          path: ./doc/releases/${{ github.ref }}.md
+          path: ./doc/releases/${{ steps.tagName.outputs.tag }}.md
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

@@ -17,6 +17,11 @@ jobs:
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths my-artifact README.md
+      - name: Read Release Notes
+        id: release_notes
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./doc/releases/${{ github.ref }}.md
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -25,6 +30,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+          body: ${{ steps.release_notes.outputs.content }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
